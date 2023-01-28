@@ -2,7 +2,11 @@ package cmd
 
 import "github.com/spf13/cobra"
 
-var rootCmd = &cobra.Command{}
+var rootCmd = &cobra.Command{
+	Use:   "",
+	Short: "",
+	Long:  "",
+}
 
 func Execute() error {
 	return rootCmd.Execute()
@@ -10,4 +14,6 @@ func Execute() error {
 
 func init() {
 	rootCmd.AddCommand(wordCmd)
+	rootCmd.AddCommand(timeCmd)
+
 }
