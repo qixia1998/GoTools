@@ -1,6 +1,10 @@
 package v1
 
 import (
+	"GoTools/blog-service/global"
+	"GoTools/blog-service/internal/service"
+	"GoTools/blog-service/pkg/app"
+	"GoTools/blog-service/pkg/errcode"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,7 +24,19 @@ func NewTag() Tag {
 // @Failure 400 {object} errcode.Error "请求错误"
 // @Failure 500 {object} errcode.Error "内部错误"
 // @Router /api/v1/tags [get]
-func (t Tag) List(c *gin.Context) {}
+func (t Tag) List(c *gin.Context) {
+	param := service.TagListRequest{}
+	response := app.NewResponse(c)
+	valid, errs := app.BindAndValid(c, &param)
+	if !valid {
+		global.Logger.Errorf(c, "app.BindAndValid errs: %v", errs)
+		response.ToErrorResponse(errcode.InvalidParams.WithDetails(errs.Errors()...))
+		return
+	}
+
+	response.ToResponse(gin.H{})
+	return
+}
 
 // @Summary 新增标签
 // @Produce  json
